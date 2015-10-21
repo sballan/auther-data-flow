@@ -16,17 +16,33 @@ router.param('id', function (req, res, next, id) {
 	.then(null, next);
 });
 
-router.get('/', function (req, res, next) {
-	User.find({}).exec()
-	.then(function (users) {
-		res.json(users);
+router.get('/:username/:password', function(req, res, next){
+	User.find({email: req.params.username, password: req.params.password}).exec()
+	.then(function (userData) {
+		if (userData.length) {
+			req.session.userId = userData._id;
+			res.status(200).json(userData);
+		}
+		else
+			res.status(401).json("User not found");
 	})
 	.then(null, next);
 });
 
+router.get('/', function (req, res, next) {
+	User.find({}).exec()
+	.then(function (userData) {
+		res.json(userData);
+	})
+	.then(null, next);
+});
+
+
+
 router.post('/', function (req, res, next) {
 	User.create(req.body)
 	.then(function (user) {
+		req.session.userId = userData._id;
 		res.status(201).json(user);
 	})
 	.then(null, next);
@@ -41,6 +57,7 @@ router.get('/:id', function (req, res, next) {
 	})
 	.then(null, next);
 });
+
 
 router.put('/:id', function (req, res, next) {
 	_.extend(req.requestedUser, req.body);
