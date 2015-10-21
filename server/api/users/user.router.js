@@ -6,6 +6,8 @@ var router = require('express').Router(),
 var HttpError = require('../../utils/HttpError');
 var User = require('./user.model');
 
+
+
 router.param('id', function (req, res, next, id) {
 	User.findById(id).exec()
 	.then(function (user) {
@@ -29,6 +31,11 @@ router.get('/:username/:password', function(req, res, next){
 	.then(null, next);
 });
 
+router.put('/logout', function(req, res, next) {
+	req.session.userId = null;
+	res.status(200).end();
+})
+
 router.get('/', function (req, res, next) {
 	User.find({}).exec()
 	.then(function (userData) {
@@ -42,7 +49,8 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res, next) {
 	User.create(req.body)
 	.then(function (user) {
-		req.session.userId = userData._id;
+		req.session.userId = user._id;
+		console.log("In the router", req.session.userId)
 		res.status(201).json(user);
 	})
 	.then(null, next);
@@ -75,5 +83,7 @@ router.delete('/:id', function (req, res, next) {
 	})
 	.then(null, next);
 });
+
+
 
 module.exports = router;
