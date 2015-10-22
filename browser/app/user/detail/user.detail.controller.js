@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('UserDetailCtrl', function ($scope, user, Story, currentUser) {
-	
+
 	console.log("second text", currentUser.text);
 
 	$scope.user = user;
@@ -20,4 +20,7 @@ app.controller('UserDetailCtrl', function ($scope, user, Story, currentUser) {
 			$scope.user.stories.splice(idx, 1);
 		});
 	};
+	// $scope.isCurrentUser = function() {
+	// 	return user._id === currentUser.userId;
+	// }
 });

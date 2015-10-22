@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('User', function ($http, Story) {
+app.factory('User', function ($http, Story, currentUser) {
 	function User (props) {
 		angular.extend(this, props);
 	}
@@ -54,6 +54,10 @@ app.factory('User', function ($http, Story) {
 	User.prototype.destroy = function () {
 		return $http.delete(this.getUrl());
 	};
+
+	User.prototype.isCurrentUser = function() {
+		return this._id === currentUser.userId;
+	}
 
 	return User;
 });
