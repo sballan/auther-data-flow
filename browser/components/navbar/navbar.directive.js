@@ -1,10 +1,10 @@
 'use strict';
 
-app.directive('navbar', function ($state, $location, $http) {
+app.directive('navbar', function ($state, $location, $http, currentUser) {
 	return {
 		restrict: 'E',
 		templateUrl: '/browser/components/navbar/navbar.html',
-		link: function (scope) {
+		link: function (scope, elem, attrs) {
 			scope.pathStartsWithStatePath = function (state) {
 				var partial = $state.href(state);
 				var path = $location.path();
@@ -16,7 +16,20 @@ app.directive('navbar', function ($state, $location, $http) {
 				.then(function() {
 					console.log("WE DID IT")
 				})
+			};
+			// if (attrs.hasOwnProperty('loggedIn')) scope.loggedIn = false;
+			
+			scope.loggedIn = function (){
+				console.log("in loggedIN");
+				return currentUser.userId !== null;
+
 			}
+
+			// if (currentUser.userId == null){
+			// 	scope.loggedIn = false;
+			// } else{
+			// 	scope.loggedIn = true;
+			// }
 		}
 	}
 });
